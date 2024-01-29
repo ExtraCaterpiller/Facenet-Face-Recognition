@@ -37,15 +37,13 @@ def recognizer(roi, model):
         print("Database empty")
         return float("inf"), ''
 
-def live_face_detection():
+def live_face_detection(model):
     detector = faceDetector("haarcascade_frontalface_default.xml")
     
     cap = cv2.VideoCapture(0)
 
     codec = cv2.VideoWriter_fourcc(*'mp4v')
     output = cv2.VideoWriter('output.mp4', codec, 20.0, (1280, 720))
-    
-    model = get_faceRecoModel()
 
     time.sleep(3)
     
@@ -80,4 +78,5 @@ def live_face_detection():
     cv2.destroyAllWindows()      
 
 if __name__ == "__main__":
-    live_face_detection()
+    model = get_faceRecoModel()
+    live_face_detection(model)
