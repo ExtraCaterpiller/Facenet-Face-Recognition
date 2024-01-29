@@ -27,16 +27,14 @@ def verify(roi, model, identity):
     else:
         return False
 
-def live_face_detection():
+def live_face_detection(model):
     detector = faceDetector("haarcascade_frontalface_default.xml")
     
     cap = cv2.VideoCapture(0)
     
     identity = input("Name of the person: ")
     print("Verifying...")
-    identity = identity.lower()
-    
-    model = get_faceRecoModel()    
+    identity = identity.lower()   
 
     time.sleep(3)
     
@@ -59,9 +57,9 @@ def live_face_detection():
         if cv2.waitKey(0) & 0xFF == ord('q'):
             break
 
-def face_verification():
+def face_verification(model):
     res = False
-    res, identity = live_face_detection()
+    res, identity = live_face_detection(model)
     door_open = False
     
     if res:
@@ -71,4 +69,5 @@ def face_verification():
         print("Wrong person")
         
 if __name__ == "__main__":
-    face_verification()
+    model = get_faceRecoModel() 
+    face_verification(model)
