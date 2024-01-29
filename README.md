@@ -9,4 +9,4 @@ CelebA source-'https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html'
 ```Tensorflow 2.10.1```
 ```opencv 4.9```
 
-Note: This is not a state of the art model So, don't expect much from it
+Note: This is not a state of the art model. So, don't expect much from it
