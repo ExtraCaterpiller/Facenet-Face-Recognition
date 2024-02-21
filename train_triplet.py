@@ -1,12 +1,7 @@
-import os
 import tensorflow as tf
-from tensorflow.kears import Input
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import concatenate
 from fr_utils import triplet_loss
-from config import input_shape
-from model import build_model
 from data_sequence_generator import *
+from FRmodel import FRmodel
 
 # Calbacks
 model_checkpoint_path = './model/best_model.h5'
@@ -38,26 +33,7 @@ adagrad = tf.keras.optimizers.Adagrad(
             name='Adagrad',
         )
 
-# Base model
-base_model = build_model()
-
 # Model
-def FRmodel():
-    A = Input(shape=input_shape, name = 'anchors')
-    P = Input(shape=input_shape, name = 'positives')
-    N = Input(shape=input_shape, name = 'negatives')
-
-    enc_A = base_model(A)
-    enc_P = base_model(P)
-    enc_N = base_model(N)
-
-    output = concatenate([enc_A, enc_P, enc_N])
-
-    FRmodel = Model(inputs=[A, P, N], outputs=output)
-    
-    return FRmodel
-
-
 model = FRmodel()
 
 model.compile(loss = triplet_loss, optimizer = adagrad)

@@ -1,11 +1,7 @@
 import tensorflow as tf
 import numpy as np
-import os
-import cv2
 import pickle
 from tensorflow.keras.layers import Conv2D, Activation, ZeroPadding2D, BatchNormalization
-from tensorflow.keras import Model
-from train_triplet import FRmodel
 from config import embedding_size
 
 
@@ -65,14 +61,3 @@ def load_file(file_path, type_of_image):
     else:
         return loaded_data['negative']
     
-def get_faceRecoModel():
-    frmodel = FRmodel()
-    
-    frmodel.load_weights('./model/best_model.h5')
-
-    inner_model_name = 'FaceRecoModel'
-    inner_model = frmodel.get_layer(inner_model_name)
-
-    model = Model(inputs=inner_model.input, outputs=inner_model.output)
-    
-    return model

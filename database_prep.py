@@ -2,7 +2,7 @@ import sqlite3
 import os
 import numpy as np
 import tensorflow as tf
-from fr_utils import get_faceRecoModel
+from FRmodel import get_faceRecoModel
 from config import database_path
 
 def database():

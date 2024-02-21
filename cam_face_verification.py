@@ -1,11 +1,10 @@
 import tensorflow as tf
 import cv2
-import os
 import time
 import sqlite3
 from Face_detector_cascade import faceDetector
 from config import image_shape, THRESHOLD
-from fr_utils import get_faceRecoModel
+from FRmodel import get_faceRecoModel
 
 conn = sqlite3.connect('face_database.db')
 c = conn.cursor()
@@ -46,7 +45,7 @@ def live_face_detection(model):
         
         for (x,y,w,h) in faces:
             roi = frame[y:y+h,x:x+w]
-            roi = tf.image.resize(roi, (160,160))
+            roi = tf.image.resize(roi, (image_shape[0], image_shape[1]))
 
             res = verify(roi, model, identity)
             if res:

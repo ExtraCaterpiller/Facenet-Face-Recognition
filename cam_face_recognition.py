@@ -1,18 +1,17 @@
 import tensorflow as tf
 import cv2
-import os
 import time
 import sqlite3
 from Face_detector_cascade import faceDetector
 from config import image_shape, THRESHOLD
-from fr_utils import get_faceRecoModel
+from FRmodel import get_faceRecoModel
 
 conn = sqlite3.connect('face_database.db')
 c = conn.cursor()
 
 
 def distance(live_emb, stored_emb):
-    dis = tf.math.reduce_sum(live_emb, stored_emb)
+    dis = tf.math.reduce_sum(live_emb-stored_emb)
     return dis
 
 def recognizer(roi, model):
@@ -40,7 +39,7 @@ def recognizer(roi, model):
 def live_face_detection(model):
     detector = faceDetector("haarcascade_frontalface_default.xml")
     
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture('test_video.mp4')
 
     codec = cv2.VideoWriter_fourcc(*'mp4v')
     output = cv2.VideoWriter('output.mp4', codec, 20.0, (1280, 720))
@@ -58,10 +57,12 @@ def live_face_detection(model):
         for (x,y,w,h) in faces:
             roi = frame[y:y+h,x:x+w]
             roi = tf.image.resize(roi, (image_shape[0], image_shape[1]))
+            roi = tf.expand_dims(roi, axis=0)
+            print(roi.shape)
             dis, identity = recognizer(roi, model)
             if dis < THRESHOLD:
                 cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), 2)
-                cv2.putText(frame, text=identity, org=(x,y), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8, color=(0,0,255), thickness=1.5)
+                cv2.putText(frame, text=identity, org=(x,y), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8, color=(0,0,255), thickness=1)
                 face_reconized = True
                 
         if face_reconized:
